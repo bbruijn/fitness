@@ -25,7 +25,7 @@ export function SessionSheet({ session, onClose }: { session: Session | null; on
     <Sheet open={!!session} onClose={onClose} title={s ? `${s.dayName}${s.focus ? ` · ${s.focus}` : ''}` : ''}>
       {s && (
         <>
-          <p className="muted" style={{ textTransform: 'capitalize' }}>
+          <p className="muted cap">
             {longDate(s.finishedAt)}
           </p>
           <div className="row" style={{ flexWrap: 'wrap', gap: 8, margin: '12px 0 18px' }}>

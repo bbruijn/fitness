@@ -240,6 +240,10 @@ p {
   color: var(--ink-3);
 }
 
+.cap::first-letter {
+  text-transform: uppercase;
+}
+
 .grad-text {
   background: var(--grad-ink);
   -webkit-background-clip: text;
