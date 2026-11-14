@@ -1,0 +1,316 @@
+/* Voortgang — only what is specific to this screen; chart chrome lives in src/charts/charts.css. */
+
+.stats-title {
+  margin-top: 6px;
+}
+
+.stats-period {
+  margin-top: 18px;
+}
+
+/* ---------- KPI tiles ---------- */
+
+.stats-kpis {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.stats-kpi {
+  min-width: 0;
+  padding: 14px 14px 13px;
+}
+
+.stats-kpi__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stats-kpi__icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 10px;
+}
+
+.stats-kpi__icon[data-tone='pink'] {
+  color: #ff8ccb;
+  background: rgba(255, 61, 187, 0.2);
+}
+
+.stats-kpi__icon[data-tone='orange'] {
+  color: #ffb070;
+  background: rgba(255, 138, 43, 0.2);
+}
+
+.stats-kpi__icon[data-tone='cyan'] {
+  color: #8fe6ff;
+  background: rgba(92, 217, 255, 0.18);
+}
+
+.stats-kpi__icon[data-tone='violet'] {
+  color: #c3b0ff;
+  background: rgba(155, 123, 255, 0.24);
+}
+
+.stats-kpi__value {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin-top: 10px;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 36px;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.stats-kpi__value small {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--ink-2);
+}
+
+.stats-kpi__note {
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- cards ---------- */
+
+.stats-card {
+  padding: 16px 16px 14px;
+}
+
+.stats-aside {
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+
+.stats-none {
+  font-size: 14.5px;
+  color: var(--ink-2);
+}
+
+.stats-empty {
+  margin-top: 24px;
+}
+
+.stats-empty .btn {
+  margin-top: 8px;
+}
+
+/* ---------- exercise picker ---------- */
+
+.stats-chips {
+  display: flex;
+  gap: 8px;
+  /* Bleeds to the screen edges; the only thing on this screen that scrolls sideways. */
+  margin: 0 calc(-1 * var(--gutter)) 12px;
+  padding: 2px var(--gutter);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 18px, #000 calc(100% - 18px), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 18px, #000 calc(100% - 18px), transparent);
+}
+
+.stats-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.stats-chip {
+  position: relative;
+  flex: none;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-size: 14.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ink-2);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--line);
+  transition: color 0.2s ease-in-out;
+}
+
+.stats-chip[aria-pressed='true'] {
+  color: #fff;
+}
+
+.stats-chip__pill {
+  position: absolute;
+  inset: -1px;
+  border-radius: 999px;
+  background: var(--grad-hot);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.stats-chip span {
+  position: relative;
+}
+
+.stats-metric {
+  flex: none;
+  width: 136px;
+}
+
+.stats-delta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  min-height: 30px;
+}
+
+.stats-delta__note {
+  min-width: 0;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- records ---------- */
+
+.stats-records {
+  overflow: hidden;
+}
+
+.stats-records table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.stats-records th,
+.stats-records td {
+  padding: 11px 6px;
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+}
+
+.stats-records th:first-child {
+  padding-left: 16px;
+}
+
+.stats-records th:nth-child(2),
+.stats-records td:nth-child(2) {
+  width: 82px;
+}
+
+.stats-records th:last-child,
+.stats-records td:last-child {
+  width: 98px;
+  padding-right: 16px;
+  text-align: right;
+}
+
+.stats-records thead th {
+  padding-top: 14px;
+  padding-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink-2);
+}
+
+.stats-records tbody tr {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.stats-records__name {
+  display: block;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.stats-records b {
+  display: block;
+  font-size: 15.5px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.stats-records small {
+  display: block;
+  margin-top: 1px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+.stats-more {
+  display: block;
+  width: 100%;
+  height: 50px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* ---------- history ---------- */
+
+.stats-session {
+  min-height: 66px;
+}
+
+.stats-session__sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin-top: 2px;
+}
+
+.stats-session__prs {
+  flex: none;
+  height: 22px;
+  padding: 0 8px;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.stats-session__figures {
+  flex: none;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.stats-session__figures b {
+  display: block;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.stats-session__figures small {
+  display: block;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.stats-session__go {
+  flex: none;
+  color: var(--ink-3);
+}

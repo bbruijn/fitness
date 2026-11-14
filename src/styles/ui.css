@@ -1,0 +1,542 @@
+/* ---------- buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 16px;
+  background: var(--glass-2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.btn--hot {
+  background: var(--grad-hot);
+  border-color: transparent;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 10px 30px -8px rgba(255, 70, 140, 0.7);
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ink-2);
+}
+
+.btn--danger {
+  color: var(--red);
+}
+
+.btn--block {
+  display: flex;
+  width: 100%;
+}
+
+.btn--sm {
+  height: 38px;
+  padding: 0 14px;
+  font-size: 14px;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--glass-2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  flex: none;
+}
+
+.icon-btn--plain {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ink-2);
+}
+
+/* The big primary action. The invisible native switch on top is what gives a haptic tick on iOS. */
+.cta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 64px;
+  border-radius: 999px;
+  font-size: 19px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  background: var(--grad-hot);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -6px 14px rgba(160, 20, 80, 0.25),
+    0 14px 36px -8px rgba(255, 70, 140, 0.75);
+  transition:
+    filter 0.3s var(--ease),
+    box-shadow 0.3s var(--ease);
+}
+
+.cta[data-tone='quiet'] {
+  background: var(--glass-2);
+  border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  color: var(--ink-2);
+}
+
+.cta[data-tone='done'] {
+  background: linear-gradient(100deg, #ffb02e, #ff5aa8 60%, #9b7bff);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 14px 36px -8px rgba(255, 138, 43, 0.7);
+}
+
+.cta__tap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  -webkit-appearance: auto;
+  appearance: auto;
+}
+
+/* ---------- chips & segmented ---------- */
+
+.seg {
+  position: relative;
+  display: flex;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--line);
+}
+
+.seg__item {
+  position: relative;
+  flex: 1;
+  height: 36px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+  transition: color 0.2s ease-in-out;
+}
+
+.seg__item[aria-pressed='true'] {
+  color: var(--ink);
+}
+
+.seg__pill {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.seg__item span {
+  position: relative;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.pill--hot {
+  color: #ffd0e6;
+  background: rgba(255, 61, 187, 0.16);
+  border-color: rgba(255, 90, 168, 0.4);
+}
+
+.pill--up {
+  color: #b9ffe2;
+  background: rgba(61, 224, 160, 0.14);
+  border-color: rgba(61, 224, 160, 0.38);
+}
+
+/* ---------- ticker ---------- */
+
+.ticker {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.ticker > span {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* ---------- stepper ---------- */
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stepper__btn {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  flex: none;
+  color: var(--ink);
+  background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.06) 60%);
+  border: 1px solid var(--line-2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 8px 18px -10px rgba(0, 0, 0, 0.8);
+}
+
+.stepper__value {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  height: 76px;
+  border-radius: var(--r-md);
+}
+
+.stepper__num {
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 76px;
+  letter-spacing: -0.03em;
+}
+
+.stepper__unit {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.stepper__input {
+  width: 100%;
+  height: 76px;
+  border: 0;
+  outline: 0;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--r-md);
+  text-align: center;
+  font-size: 56px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  caret-color: var(--pink);
+}
+
+.stepper--sm .stepper__btn {
+  width: 44px;
+  height: 44px;
+}
+
+.stepper--sm .stepper__value,
+.stepper--sm .stepper__input {
+  height: 48px;
+}
+
+.stepper--sm .stepper__num {
+  font-size: 30px;
+  line-height: 48px;
+}
+
+.stepper--sm .stepper__input {
+  font-size: 28px;
+}
+
+.stepper--sm .stepper__unit {
+  font-size: 14px;
+}
+
+/* ---------- sheet ---------- */
+
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(4, 3, 16, 0.62);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: var(--kb, 0px);
+  z-index: 61;
+  max-width: 480px;
+  margin: 0 auto;
+  max-height: calc(100% - var(--kb, 0px) - var(--safe-top) - 36px);
+  transition: bottom 0.25s var(--ease);
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  background: linear-gradient(180deg, rgba(42, 34, 92, 0.96), rgba(18, 14, 48, 0.98));
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 -30px 80px rgba(0, 0, 0, 0.6);
+}
+
+.sheet__grab {
+  flex: none;
+  padding: 10px 0 6px;
+  display: grid;
+  place-items: center;
+  touch-action: none;
+  cursor: grab;
+}
+
+.sheet__grab i {
+  width: 40px;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.sheet__head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 20px 12px;
+}
+
+.sheet__title {
+  flex: 1;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.sheet__body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 20px calc(var(--safe-bottom) + 24px);
+  scrollbar-width: none;
+}
+
+/* ---------- list rows ---------- */
+
+.list {
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.list__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 60px;
+  padding: 10px 16px;
+  text-align: left;
+}
+
+.list__row + .list__row {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.list__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.list__title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list__sub {
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+
+/* ---------- switch ---------- */
+
+.toggle {
+  position: relative;
+  width: 52px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  flex: none;
+  transition: background 0.25s ease-in-out;
+}
+
+.toggle[aria-checked='true'] {
+  background: linear-gradient(100deg, #ff3dbb, #ff8a2b);
+}
+
+.toggle i {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- tab bar ---------- */
+
+.tabbar {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--safe-bottom) + 14px);
+  z-index: 20;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(24, 19, 58, 0.72);
+  border: 1px solid var(--line);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 18px 40px -12px rgba(0, 0, 0, 0.8);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+}
+
+.tabbar__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 96px;
+  height: 56px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+  transition: color 0.2s ease-in-out;
+}
+
+.tabbar__item[aria-current='page'] {
+  color: var(--ink);
+}
+
+.tabbar__pill {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.07));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.tabbar__item > *:not(.tabbar__pill) {
+  position: relative;
+}
+
+/* ---------- misc ---------- */
+
+.confetti {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.confetti i {
+  position: absolute;
+  display: block;
+  border-radius: 3px;
+}
+
+.field {
+  width: 100%;
+  height: 50px;
+  padding: 0 16px;
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--line);
+  outline: 0;
+  font-size: 16px;
+}
+
+.field:focus {
+  border-color: rgba(255, 90, 168, 0.7);
+}
+
+textarea.field {
+  height: auto;
+  min-height: 84px;
+  padding: 12px 16px;
+  resize: none;
+}
+
+.label {
+  display: block;
+  margin: 0 4px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 28px 20px 32px;
+}
+
+.empty img {
+  width: 150px;
+  height: 150px;
+}
+
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-10px) rotate(3deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float {
+    animation: none;
+  }
+}

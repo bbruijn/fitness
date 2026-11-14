@@ -1,0 +1,300 @@
+@property --a1 { syntax: '<color>'; inherits: true; initial-value: #6b3bff; }
+@property --a2 { syntax: '<color>'; inherits: true; initial-value: #e935c1; }
+@property --a3 { syntax: '<color>'; inherits: true; initial-value: #3b5bff; }
+
+:root {
+  --bg: #07061a;
+  --ink: #ffffff;
+  --ink-2: rgba(236, 232, 255, 0.68);
+  --ink-3: rgba(236, 232, 255, 0.42);
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-2: rgba(255, 255, 255, 0.11);
+  --line: rgba(255, 255, 255, 0.12);
+  --line-2: rgba(255, 255, 255, 0.2);
+
+  --violet: #9b7bff;
+  --magenta: #fb35b5;
+  --pink: #ff5aa8;
+  --orange: #ff8a2b;
+  --cyan: #5cd9ff;
+  --green: #3de0a0;
+  --red: #ff5a6e;
+
+  --grad-hot: linear-gradient(100deg, #ff3dbb 0%, #ff5470 52%, #ff8a2b 100%);
+  --grad-cool: linear-gradient(100deg, #7c5cff 0%, #4aa8ff 100%);
+  --grad-ink: linear-gradient(180deg, #ffffff 30%, #cbb8ff 100%);
+
+  --ease: cubic-bezier(0.625, 0.05, 0, 1);
+  --r-xl: 32px;
+  --r-lg: 24px;
+  --r-md: 18px;
+  --r-sm: 12px;
+  --gutter: 20px;
+  --font: 'Outfit Variable', ui-rounded, 'SF Pro Rounded', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --tabbar: 92px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+html {
+  background: var(--bg);
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+input,
+textarea {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* ---------- shell ---------- */
+
+.app {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.column {
+  position: relative;
+  height: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: calc(var(--safe-top) + 18px) var(--gutter) calc(var(--tabbar) + var(--safe-bottom) + 28px);
+}
+
+.screen::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- aurora background ---------- */
+
+.aurora {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--bg);
+  transition:
+    --a1 1.4s var(--ease),
+    --a2 1.4s var(--ease),
+    --a3 1.4s var(--ease);
+}
+
+.aurora[data-mood='home'] { --a1: #6b3bff; --a2: #e935c1; --a3: #3b5bff; }
+.aurora[data-mood='schema'] { --a1: #3b6bff; --a2: #7c4dff; --a3: #1fb6d9; }
+.aurora[data-mood='stats'] { --a1: #17b8c9; --a2: #6b3bff; --a3: #c23bff; }
+.aurora[data-mood='workout'] { --a1: #ff3d9a; --a2: #7a3bff; --a3: #ff7a2f; }
+.aurora[data-mood='rest'] { --a1: #2b7bff; --a2: #19c2d6; --a3: #5a3bff; }
+.aurora[data-mood='done'] { --a1: #ff8a2b; --a2: #ff3dbb; --a3: #8b5cff; }
+
+.aurora i {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.aurora i:nth-child(1) {
+  width: 110vmax;
+  height: 110vmax;
+  right: -52vmax;
+  top: -46vmax;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--a1) 62%, transparent), transparent);
+  animation: drift-a 26s ease-in-out infinite alternate;
+}
+
+.aurora i:nth-child(2) {
+  width: 96vmax;
+  height: 96vmax;
+  left: -58vmax;
+  top: 22vmax;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--a2) 46%, transparent), transparent);
+  animation: drift-b 32s ease-in-out infinite alternate;
+}
+
+.aurora i:nth-child(3) {
+  width: 100vmax;
+  height: 100vmax;
+  right: -50vmax;
+  bottom: -62vmax;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--a3) 44%, transparent), transparent);
+  animation: drift-c 38s ease-in-out infinite alternate;
+}
+
+/* Keeps text legible wherever the blobs drift. */
+.aurora::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 80% at 50% 45%, rgba(7, 6, 26, 0.72), rgba(7, 6, 26, 0.3) 70%, transparent);
+}
+
+@keyframes drift-a {
+  to { transform: translate3d(-14vmax, 10vmax, 0) scale(1.12); }
+}
+@keyframes drift-b {
+  to { transform: translate3d(16vmax, -12vmax, 0) scale(0.9); }
+}
+@keyframes drift-c {
+  to { transform: translate3d(-12vmax, -14vmax, 0) scale(1.15); }
+}
+
+/* ---------- type ---------- */
+
+.eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.title {
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.h2 {
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.muted {
+  color: var(--ink-2);
+}
+
+.dim {
+  color: var(--ink-3);
+}
+
+.cap::first-letter {
+  text-transform: uppercase;
+}
+
+.grad-text {
+  background: var(--grad-ink);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hot-text {
+  background: var(--grad-hot);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- surfaces ---------- */
+
+.glass {
+  position: relative;
+  border-radius: var(--r-lg);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.035));
+  border: 1px solid var(--line);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 18px 40px -22px rgba(0, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  backdrop-filter: blur(22px) saturate(140%);
+}
+
+.section {
+  margin-top: 28px;
+}
+
+.section__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0 4px 12px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora i {
+    animation: none;
+  }
+}
