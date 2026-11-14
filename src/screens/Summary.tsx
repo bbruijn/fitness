@@ -78,7 +78,7 @@ export function Summary({ session, onClose }: { session: Session; onClose: () =>
               <span>sets</span>
             </div>
             <div className="glass summary__tile">
-              <b className={prs.length ? 'hot-text' : undefined}>
+              <b style={prs.length ? { color: 'var(--pink)' } : undefined}>
                 <CountUp value={prs.length} delay={0.5} />
               </b>
               <span>{prs.length === 1 ? 'record' : 'records'}</span>

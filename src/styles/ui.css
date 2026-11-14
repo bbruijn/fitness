@@ -228,6 +228,7 @@
 }
 
 .stepper__num {
+  color: #f4efff;
   font-size: 64px;
   font-weight: 700;
   line-height: 76px;

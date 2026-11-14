@@ -12,14 +12,17 @@ interface Props {
   unit: string
   label: string
   size?: 'lg' | 'sm'
-  /** Class for the big number, e.g. a gradient text. */
+  /**
+   * Class for the big number. Keep it to a plain `color`: the digits are animated, and Safari does not
+   * paint `background-clip: text` through an animated child — the number simply disappears.
+   */
   numClass?: string
 }
 
 const round = (n: number): number => Math.round(n * 100) / 100
 
 /** −/+ with hold-to-repeat; tap the number to type it. */
-export function Stepper({ value, onChange, step, min = 0, max = 999, unit, label, size = 'lg', numClass = 'grad-text' }: Props) {
+export function Stepper({ value, onChange, step, min = 0, max = 999, unit, label, size = 'lg', numClass = '' }: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState('')
   const latest = useRef(value)
