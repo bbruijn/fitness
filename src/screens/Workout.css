@@ -132,11 +132,9 @@
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
 }
 
+/* A plain colour on purpose — see Stepper's numClass. */
 .reps-text {
-  background: linear-gradient(180deg, #ffffff 30%, #ffb0d8 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: #ffc4e2;
 }
 
 /* ---------- set chips ---------- */
