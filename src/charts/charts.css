@@ -1,0 +1,282 @@
+/* Shared chrome for the hand-drawn charts. Marks carry colour; every label wears a text token. */
+
+.chart {
+  /* Approximates the glass card over the aurora — used for the ring that separates dots from lines. */
+  --chart-surface: #1b1746;
+  --chart-heat: #ff4d9a;
+}
+
+.chart-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 54px;
+}
+
+.chart-readout {
+  min-width: 0;
+  flex: 1;
+}
+
+.chart-readout__line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.chart-readout__value {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 32px;
+  letter-spacing: -0.02em;
+}
+
+.chart-readout__value--sm {
+  font-size: 22px;
+}
+
+.chart-readout__unit {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.chart-readout__note {
+  margin-top: 1px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chart-plot {
+  position: relative;
+  margin-top: 6px;
+  /* Vertical drags scroll the page; horizontal drags scrub the chart. */
+  touch-action: pan-y;
+  cursor: crosshair;
+}
+
+.chart-plot:focus-visible {
+  outline-offset: 6px;
+  border-radius: 10px;
+}
+
+.chart-plot svg {
+  display: block;
+  overflow: visible;
+}
+
+.chart-tick {
+  font-size: 11.5px;
+  font-weight: 500;
+  fill: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-empty {
+  font-size: 13px;
+  fill: var(--ink-2);
+}
+
+.chart-grid {
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.chart-base {
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 1;
+}
+
+.chart-goal {
+  stroke: rgba(255, 255, 255, 0.78);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 5;
+  stroke-linecap: round;
+}
+
+.chart-check {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chart-band {
+  fill: rgba(255, 255, 255, 0.07);
+}
+
+.chart-cross {
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 1;
+}
+
+.chart-dot {
+  stroke: var(--chart-surface);
+  stroke-width: 2;
+}
+
+.chart-dot--active {
+  stroke: #fff;
+  stroke-width: 2.5;
+}
+
+/* ---------- legend ---------- */
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+.chart-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.chart-key {
+  display: inline-block;
+  flex: none;
+}
+
+.chart-key--goal {
+  width: 18px;
+  height: 0;
+  border-top: 2px dotted rgba(255, 255, 255, 0.78);
+}
+
+.chart-key--hit,
+.chart-key--miss {
+  position: relative;
+  width: 10px;
+  height: 14px;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(0deg, #ff3dbb, #ff8a2b);
+}
+
+.chart-key--miss {
+  opacity: 0.4;
+}
+
+.chart-key--cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 3.5px;
+  background: var(--cell);
+}
+
+.chart-legend .chart-key--cell + .chart-key--cell {
+  margin-left: -3px;
+}
+
+.chart-key--today {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  border: 1.5px solid #fff;
+}
+
+/* ---------- ranked rows ---------- */
+
+.chart-rows {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) 76px;
+  align-items: center;
+  gap: 10px;
+  min-height: 22px;
+}
+
+.chart-row__name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.chart-row__track {
+  display: block;
+  height: 10px;
+  overflow: hidden;
+  /* Square at the baseline; the rounded end belongs to the bar. */
+  border-radius: 2px 5px 5px 2px;
+}
+
+.chart-row__track i {
+  display: block;
+  height: 100%;
+  border-radius: 0 5px 5px 0;
+  background: linear-gradient(90deg, #7c5cff, #9b7bff 55%, #b79bff);
+  will-change: transform;
+}
+
+.chart-row__value {
+  font-size: 15px;
+  font-weight: 650;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.chart-row__value small {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+/* ---------- calendar heatmap ---------- */
+
+.chart-cell {
+  fill: var(--cell);
+}
+
+.chart-cell--0 {
+  --cell: rgba(255, 255, 255, 0.08);
+}
+
+.chart-cell--1 {
+  --cell: color-mix(in srgb, var(--chart-heat) 36%, transparent);
+}
+
+.chart-cell--2 {
+  --cell: color-mix(in srgb, var(--chart-heat) 66%, transparent);
+}
+
+.chart-cell--3 {
+  --cell: var(--chart-heat);
+}
+
+.chart-cell--future {
+  --cell: transparent;
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 1;
+}
+
+.chart-today {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+
+.chart-pick {
+  fill: rgba(255, 255, 255, 0.12);
+  stroke: var(--cyan);
+  stroke-width: 2;
+}

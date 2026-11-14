@@ -1,0 +1,369 @@
+.workout {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--safe-top) + 10px) 0 calc(var(--safe-bottom) + 16px);
+}
+
+.workout__bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 var(--gutter);
+}
+
+.workout__clock {
+  flex: 1;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.workout__clock b {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.workout__clock span {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+
+/* one segment per exercise, filling as its sets are logged */
+.segs {
+  flex: none;
+  display: flex;
+  gap: 5px;
+  padding: 14px var(--gutter) 0;
+}
+
+.segs__item {
+  position: relative;
+  flex: 1;
+  height: 22px;
+  display: flex;
+  align-items: center;
+}
+
+.segs__track {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.13);
+  transition: height 0.3s var(--ease), background 0.3s;
+}
+
+.segs__item[aria-current='true'] .segs__track {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.segs__fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left;
+  background: var(--grad-hot);
+  border-radius: inherit;
+}
+
+.workout__stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.exercise {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  padding: 18px var(--gutter) 8px;
+  touch-action: pan-y;
+}
+
+.exercise::-webkit-scrollbar {
+  display: none;
+}
+
+.exercise__title {
+  margin-top: 4px;
+  font-size: clamp(28px, 8.4vw, 36px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.exercise__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+  min-height: 30px;
+}
+
+.dial {
+  margin-top: 18px;
+  padding: 14px 14px;
+  border-radius: var(--r-xl);
+}
+
+.dial__record {
+  position: absolute;
+  top: -13px;
+  right: 16px;
+  z-index: 2;
+  background: #12382f;
+  box-shadow: 0 6px 18px -4px rgba(61, 224, 160, 0.6);
+}
+
+.dial__rule {
+  height: 1px;
+  margin: 8px 6px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+}
+
+.reps-text {
+  background: linear-gradient(180deg, #ffffff 30%, #ffb0d8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- set chips ---------- */
+
+.sets {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.setchip {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 58px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  color: var(--ink-3);
+  font-weight: 600;
+  transition:
+    color 0.2s,
+    background 0.3s,
+    border-color 0.3s;
+}
+
+.setchip__n {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14.5px;
+}
+
+.setchip__v {
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.85;
+  white-space: nowrap;
+}
+
+.setchip[data-done='true'] {
+  color: #e6dcff;
+  background: rgba(139, 108, 255, 0.24);
+  border-color: rgba(155, 123, 255, 0.45);
+}
+
+.setchip[aria-pressed='true'] {
+  color: var(--ink);
+}
+
+.setchip__ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 20px;
+  border: 2px solid #ff5aa8;
+  box-shadow:
+    0 0 18px rgba(255, 90, 168, 0.55),
+    inset 0 0 12px rgba(255, 90, 168, 0.25);
+  pointer-events: none;
+}
+
+.setchip__check {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--violet);
+  color: #fff;
+}
+
+.setchip--add {
+  flex: none;
+  width: 52px;
+  border-style: dashed;
+  color: var(--ink-2);
+}
+
+.exercise__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* ---------- footer: rest dock + cta ---------- */
+
+.workout__foot {
+  flex: none;
+  padding: 8px var(--gutter) 0;
+}
+
+.rest {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px 12px 12px;
+  margin-bottom: 12px;
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.rest__time {
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.rest__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.rest__next {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rest__next .rest__label {
+  font-size: 12px;
+}
+
+.rest[data-go='true'] {
+  background: linear-gradient(100deg, rgba(255, 61, 187, 0.42), rgba(255, 138, 43, 0.42));
+  border-color: rgba(255, 150, 190, 0.6);
+}
+
+.rest__go {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--grad-hot);
+  flex: none;
+  box-shadow: 0 0 26px rgba(255, 90, 168, 0.7);
+}
+
+.cta-wrap {
+  position: relative;
+}
+
+.cta__ripple {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 170, 210, 0.9);
+  pointer-events: none;
+}
+
+/* exercise overview sheet */
+.ovw__state {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex: none;
+  font-size: 13px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+}
+
+.ovw__state[data-done='true'] {
+  background: var(--grad-hot);
+  border-color: transparent;
+  color: #fff;
+}
+
+.list__row[aria-current='true'] {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Short phones: keep the set chips in view above the rest dock. */
+@media (max-height: 720px) {
+  .exercise {
+    padding-top: 12px;
+  }
+
+  .exercise__title {
+    font-size: 27px;
+  }
+
+  .dial {
+    margin-top: 14px;
+    padding: 8px 12px;
+  }
+
+  .dial .stepper__btn {
+    width: 50px;
+    height: 50px;
+  }
+
+  .dial .stepper__value,
+  .dial .stepper__input {
+    height: 58px;
+  }
+
+  .dial .stepper__num {
+    font-size: 50px;
+    line-height: 58px;
+  }
+
+  .setchip {
+    height: 50px;
+  }
+
+  .sets,
+  .exercise__tools {
+    margin-top: 10px;
+  }
+}
