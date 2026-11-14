@@ -79,7 +79,15 @@ export function WeekBars({ weeks, goal }: { weeks: WeekBucket[]; goal: number })
         </div>
       </div>
 
-      <div ref={ref} className="chart-plot" style={{ height: HEIGHT }} tabIndex={0} {...scrub.bind}>
+      <div
+        ref={ref}
+        className="chart-plot"
+        style={{ height: HEIGHT }}
+        tabIndex={0}
+        role="group"
+        aria-label="Trainingen per week. Sleep of gebruik de pijltjestoetsen om losse weken te lezen."
+        {...scrub.bind}
+      >
         {width > 0 && (
           <svg width={width} height={HEIGHT} role="img" aria-label={label}>
             <defs>

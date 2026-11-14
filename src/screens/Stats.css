@@ -26,10 +26,13 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
   font-size: 13.5px;
   font-weight: 600;
   color: var(--ink-2);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .stats-kpi__icon {
@@ -166,7 +169,7 @@
 
 .stats-metric {
   flex: none;
-  width: 140px;
+  width: 136px;
 }
 
 .stats-delta {
@@ -271,6 +274,40 @@
 
 .stats-session {
   min-height: 66px;
+}
+
+.stats-session__sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin-top: 2px;
+}
+
+.stats-session__prs {
+  flex: none;
+  height: 22px;
+  padding: 0 8px;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.stats-session__figures {
+  flex: none;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.stats-session__figures b {
+  display: block;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.stats-session__figures small {
+  display: block;
+  font-size: 13px;
+  color: var(--ink-2);
 }
 
 .stats-session__go {

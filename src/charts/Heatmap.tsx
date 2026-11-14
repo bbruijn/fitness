@@ -120,7 +120,15 @@ export function Heatmap({ sessions, now, weeks = 15 }: { sessions: Session[]; no
         </div>
       </div>
 
-      <div ref={ref} className="chart-plot" style={{ height: width ? height : 160 }} tabIndex={0} {...scrub.bind}>
+      <div
+        ref={ref}
+        className="chart-plot"
+        style={{ height: width ? height : 160 }}
+        tabIndex={0}
+        role="group"
+        aria-label="Trainingskalender. Raak een dag aan of gebruik de pijltjestoetsen om die dag te lezen."
+        {...scrub.bind}
+      >
         {width > 0 && (
           <svg
             width={width}

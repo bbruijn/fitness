@@ -263,6 +263,7 @@ function VolumeTrend({ weeks }: { weeks: WeekBucket[] }) {
   return (
     <TrendLine
       tone="cool"
+      name="Volume per week"
       zero
       points={points}
       scale={scale}
@@ -359,6 +360,7 @@ function ExerciseProgress({ sessions, exercises }: { sessions: Session[]; exerci
       <div className="glass stats-card">
         <TrendLine
           tone="hot"
+          name={`Progressie ${current.name}`}
           inset={8}
           points={chart.points}
           scale={chart.scale}
@@ -412,7 +414,7 @@ function ExerciseProgress({ sessions, exercises }: { sessions: Session[]; exerci
               ) : (
                 <span className="pill">Geen metingen</span>
               )}
-              <span className="stats-delta__note">{metric === 'top' ? 'Topgewicht per training' : 'Geschat 1RM per training'}</span>
+              <span className="stats-delta__note">{values.length === 1 ? '1 meting' : `${values.length} metingen`}</span>
             </div>
           }
         />
@@ -487,16 +489,24 @@ function History({ sessions, all, now, onOpen }: { sessions: Session[]; all: Ses
           <motion.button key={s.id} type="button" className="list__row stats-session" whileTap={{ scale: 0.98 }} transition={snappy} onClick={() => onOpen(s)}>
             <div className="list__main">
               <div className="list__title">{[s.dayName, s.focus].filter(Boolean).join(' · ')}</div>
-              <div className="list__sub">
-                {relativeDay(s.finishedAt, now)} · {duration(sessionDuration(s))} · {v.value} {v.unit} · {sessionSets(s)} sets
+              <div className="list__sub stats-session__sub">
+                <span>{relativeDay(s.finishedAt, now)}</span>
+                {prs > 0 && (
+                  <span className="pill pill--hot stats-session__prs" role="img" aria-label={prs === 1 ? '1 record' : `${prs} records`}>
+                    <IconTrophy size={13} />
+                    {prs}
+                  </span>
+                )}
               </div>
             </div>
-            {prs > 0 && (
-              <span className="pill pill--hot" aria-label={prs === 1 ? '1 record' : `${prs} records`}>
-                <IconTrophy size={14} />
-                {prs}
-              </span>
-            )}
+            <div className="stats-session__figures">
+              <b>
+                {v.value} {v.unit}
+              </b>
+              <small>
+                {duration(sessionDuration(s))} · {sessionSets(s)} sets
+              </small>
+            </div>
             <IconChevronRight size={18} className="stats-session__go" />
           </motion.button>
         )

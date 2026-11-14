@@ -26,6 +26,8 @@ interface Props {
   formatTick: (v: number) => string
   labels: TrendLabel[]
   tone: 'hot' | 'cool'
+  /** Short name of the chart, for the focusable plot. */
+  name: string
   /** Accessible summary of the data. */
   label: string
   /** Headline above the plot: the default reading, or the point under the finger. */
@@ -59,6 +61,7 @@ export function TrendLine({
   formatTick,
   labels,
   tone,
+  name,
   label,
   readout,
   aside,
@@ -90,6 +93,8 @@ export function TrendLine({
     [points, scale.lo, span, left, right, base],
   )
   const xs = useMemo(() => px.map((p) => p.x), [px])
+  // Dots follow the line when the same sessions get new values; a different set of sessions pops in afresh.
+  const signature = useMemo(() => points.map((p) => p.id).join('|'), [points])
   const sampled = useMemo(() => (px.length > 1 ? resample(px, SAMPLES) : []), [px])
   const line = linePath(sampled)
   const area = areaPath(sampled, base)
@@ -111,7 +116,15 @@ export function TrendLine({
       </div>
       {below}
 
-      <div ref={ref} className="chart-plot" style={{ height }} tabIndex={0} {...scrub.bind}>
+      <div
+        ref={ref}
+        className="chart-plot"
+        style={{ height }}
+        tabIndex={0}
+        role="group"
+        aria-label={`${name}. Sleep of gebruik de pijltjestoetsen om losse waarden te lezen.`}
+        {...scrub.bind}
+      >
         {width > 0 && (
           <svg width={width} height={height} role="img" aria-label={label}>
             <defs>
@@ -168,7 +181,7 @@ export function TrendLine({
               if (!allDots && !end) return null
               return (
                 <motion.circle
-                  key={i}
+                  key={`${signature}-${i}`}
                   className="chart-dot"
                   fill={`url(#${id}-stroke)`}
                   initial={{ cx: p.x, cy: p.y, r: 0 }}
