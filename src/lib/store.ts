@@ -50,6 +50,7 @@ interface Actions {
   updateItem: (dayId: string, itemId: string, patch: Partial<Omit<PlanItem, 'id'>>) => void
   removeItem: (dayId: string, itemId: string) => void
   reorderItems: (dayId: string, itemIds: string[]) => void
+  reorderDays: (dayIds: string[]) => void
   addExercise: (name: string, muscle: Muscle) => string
 
   deleteSession: (id: string) => void
@@ -279,6 +280,13 @@ export const useStore = create<Store>()(
           program((p) => {
             const d = p.days.find((x) => x.id === dayId)
             if (d) d.items = d.items.filter((x) => x.id !== itemId)
+          }),
+
+        reorderDays: (dayIds) =>
+          program((p) => {
+            const byId = new Map(p.days.map((d) => [d.id, d]))
+            const ordered = dayIds.map((id) => byId.get(id)).filter((d): d is Day => !!d)
+            if (ordered.length === p.days.length) p.days = ordered
           }),
 
         reorderItems: (dayId, itemIds) =>

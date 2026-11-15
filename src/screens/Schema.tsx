@@ -2,7 +2,7 @@ import { AnimatePresence, motion, Reorder, useDragControls } from 'motion/react'
 import { useEffect, useMemo, useState } from 'react'
 import { num } from '../lib/format'
 import { nextDayId, useStore } from '../lib/store'
-import { MUSCLE_LABEL, MUSCLES, type Day, type Muscle, type PlanItem } from '../lib/types'
+import { MUSCLE_LABEL, MUSCLES, type ActiveSession, type Day, type Muscle, type PlanItem } from '../lib/types'
 import { IconChevronDown, IconChevronRight, IconCopy, IconGrip, IconPlay, IconPlus, IconSearch, IconTrash } from '../ui/icons'
 import { rise, snappy, spring, stagger } from '../ui/motion'
 import { Press } from '../ui/Press'
@@ -16,7 +16,7 @@ export function Schema({ onStart }: { onStart: (dayId: string) => void }) {
   const program = useStore((s) => s.program)
   const sessions = useStore((s) => s.sessions)
   const active = useStore((s) => s.active)
-  const { renameProgram, addDay } = useStore.getState()
+  const { renameProgram, addDay, reorderDays } = useStore.getState()
 
   const [open, setOpen] = useState<string | null>(() => nextDayId(program, sessions))
   const [editing, setEditing] = useState<Editing>(null)
@@ -46,64 +46,28 @@ export function Schema({ onStart }: { onStart: (dayId: string) => void }) {
           onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
         />
         <p className="muted" style={{ marginTop: 6 }}>
-          Het advies per oefening past zich na elke training aan.
+          Sleep aan <IconGrip size={15} style={{ verticalAlign: '-2px' }} /> om dagen of oefeningen te verplaatsen.
         </p>
       </motion.header>
 
-      {program.days.map((day, i) => (
-        <motion.section
-          key={day.id}
-          className="glass day"
-          data-fresh={day.id === fresh || undefined}
-          variants={rise}
-          initial={day.id === fresh ? { opacity: 0, y: -16, scale: 0.97 } : undefined}
-          animate={day.id === fresh ? { opacity: 1, y: 0, scale: 1 } : undefined}
-          layout="position"
-          transition={spring}
-        >
-          <button type="button" className="day__head" aria-expanded={open === day.id} onClick={() => setOpen(open === day.id ? null : day.id)}>
-            <span className="day__badge">{i + 1}</span>
-            <div className="list__main">
-              <div className="list__title">
-                {day.name}
-                {day.focus ? ` · ${day.focus}` : ''}
-              </div>
-              <div className="list__sub">
-                {day.items.length} {day.items.length === 1 ? 'oefening' : 'oefeningen'} · {day.items.reduce((n, it) => n + it.sets, 0)} sets
-              </div>
-            </div>
-            <motion.span animate={{ rotate: open === day.id ? 180 : 0 }} transition={snappy} className="dim" style={{ display: 'grid' }}>
-              <IconChevronDown />
-            </motion.span>
-          </button>
-
-          <AnimatePresence initial={false}>
-            {open === day.id && (
-              <motion.div
-                className="day__body"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={spring}
-              >
-                <DayItems day={day} onEdit={(itemId) => setEditing({ dayId: day.id, itemId })} />
-                <div className="day__foot">
-                  <Press className="btn btn--sm" onClick={() => setPicking(day.id)}>
-                    <IconPlus size={17} /> Oefening
-                  </Press>
-                  <Press className="btn btn--sm" onClick={() => setDayEdit(day.id)}>
-                    Bewerken
-                  </Press>
-                  <span className="spacer" />
-                  <Press className="btn btn--sm btn--hot" disabled={!day.items.length || (!!active && active.dayId !== day.id)} onClick={() => onStart(day.id)}>
-                    <IconPlay size={15} /> {active?.dayId === day.id ? 'Verder' : 'Start'}
-                  </Press>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.section>
-      ))}
+      <Reorder.Group as="div" axis="y" values={program.days.map((d) => d.id)} onReorder={(ids) => reorderDays(ids as string[])}>
+        {program.days.map((day, i) => (
+          <DayCard
+            key={day.id}
+            day={day}
+            index={i}
+            open={open === day.id}
+            fresh={day.id === fresh}
+            active={active}
+            onToggle={() => setOpen(open === day.id ? null : day.id)}
+            onDragStart={() => setOpen(null)}
+            onEditItem={(itemId) => setEditing({ dayId: day.id, itemId })}
+            onAddExercise={() => setPicking(day.id)}
+            onEditDay={() => setDayEdit(day.id)}
+            onStart={() => onStart(day.id)}
+          />
+        ))}
+      </Reorder.Group>
 
       <motion.div variants={rise} style={{ marginTop: 16 }}>
         <Press className="btn btn--block" onClick={addDay}>
@@ -123,6 +87,101 @@ export function Schema({ onStart }: { onStart: (dayId: string) => void }) {
         }}
       />
     </motion.div>
+  )
+}
+
+interface DayCardProps {
+  day: Day
+  index: number
+  open: boolean
+  fresh: boolean
+  active: ActiveSession | null
+  onToggle: () => void
+  onDragStart: () => void
+  onEditItem: (itemId: string) => void
+  onAddExercise: () => void
+  onEditDay: () => void
+  onStart: () => void
+}
+
+/** One training day: a header that opens it, and a grip to drag it to another place in the schema. */
+function DayCard({ day, index, open, fresh, active, onToggle, onDragStart, onEditItem, onAddExercise, onEditDay, onStart }: DayCardProps) {
+  const controls = useDragControls()
+  const [dragging, setDragging] = useState(false)
+  return (
+    <Reorder.Item
+      as="section"
+      value={day.id}
+      className="glass day"
+      data-fresh={fresh || undefined}
+      data-dragging={dragging || undefined}
+      variants={rise}
+      initial={fresh ? { opacity: 0, y: -16, scale: 0.97 } : undefined}
+      animate={fresh ? { opacity: 1, y: 0, scale: 1 } : undefined}
+      dragListener={false}
+      dragControls={controls}
+      onDragStart={() => setDragging(true)}
+      onDragEnd={() => setDragging(false)}
+      whileDrag={{ scale: 1.03, zIndex: 5, boxShadow: '0 24px 50px rgba(0,0,0,.55), 0 0 0 2px rgba(255,90,168,.55)' }}
+      transition={spring}
+    >
+      <div className="day__head">
+        <span
+          className="day__grip"
+          role="button"
+          aria-label={`${day.name} verplaatsen`}
+          onPointerDown={(e) => {
+            e.preventDefault()
+            // Fold an open day first, so a short card is dragged instead of a long one.
+            onDragStart()
+            controls.start(e)
+          }}
+        >
+          <IconGrip size={20} />
+        </span>
+        <button type="button" className="day__toggle" aria-expanded={open} onClick={onToggle}>
+          <span className="day__badge">{index + 1}</span>
+          <div className="list__main">
+            <div className="list__title">
+              {day.name}
+              {day.focus ? ` · ${day.focus}` : ''}
+            </div>
+            <div className="list__sub">
+              {day.items.length} {day.items.length === 1 ? 'oefening' : 'oefeningen'} · {day.items.reduce((n, it) => n + it.sets, 0)} sets
+            </div>
+          </div>
+          <motion.span animate={{ rotate: open ? 180 : 0 }} transition={snappy} className="dim" style={{ display: 'grid' }}>
+            <IconChevronDown />
+          </motion.span>
+        </button>
+      </div>
+
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            className="day__body"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={spring}
+          >
+            <DayItems day={day} onEdit={onEditItem} />
+            <div className="day__foot">
+              <Press className="btn btn--sm" onClick={onAddExercise}>
+                <IconPlus size={17} /> Oefening
+              </Press>
+              <Press className="btn btn--sm" onClick={onEditDay}>
+                Bewerken
+              </Press>
+              <span className="spacer" />
+              <Press className="btn btn--sm btn--hot" disabled={!day.items.length || (!!active && active.dayId !== day.id)} onClick={onStart}>
+                <IconPlay size={15} /> {active?.dayId === day.id ? 'Verder' : 'Start'}
+              </Press>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </Reorder.Item>
   )
 }
 
