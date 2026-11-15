@@ -32,12 +32,43 @@
   100% { box-shadow: 0 0 0 0 rgba(255, 90, 168, 0); border-color: var(--line); }
 }
 
+.day {
+  position: relative;
+}
+
+.day[data-dragging] {
+  background: linear-gradient(160deg, rgba(70, 56, 150, 0.97), rgba(40, 30, 96, 0.97));
+}
+
 .day__head {
   display: flex;
   align-items: center;
+}
+
+.day__grip {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  width: 40px;
+  flex: none;
+  padding-left: 6px;
+  color: var(--ink-3);
+  touch-action: none;
+  cursor: grab;
+}
+
+.day[data-dragging] .day__grip {
+  cursor: grabbing;
+  color: var(--ink);
+}
+
+.day__toggle {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
   gap: 12px;
-  width: 100%;
-  padding: 16px;
+  padding: 16px 16px 16px 2px;
   text-align: left;
 }
 

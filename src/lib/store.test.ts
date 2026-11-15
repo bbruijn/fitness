@@ -108,6 +108,34 @@ describe('duplicating a day', () => {
   })
 })
 
+describe('reordering days', () => {
+  it('stores the new order and moves the suggested next day with it', () => {
+    state().reorderDays(['day-3', 'day-1', 'day-4', 'day-2'])
+    expect(state().program.days.map((d) => d.id)).toEqual(['day-3', 'day-1', 'day-4', 'day-2'])
+
+    // after training day-1, the next day is whatever now follows it
+    state().startWorkout('day-1')
+    state().completeSet(0, 0)
+    state().finishWorkout()
+    expect(nextDayId(state().program, state().sessions)).toBe('day-4')
+  })
+
+  it('moves a copied day to the end', () => {
+    const copy = state().duplicateDay('day-1')!
+    const ids = state().program.days.map((d) => d.id).filter((id) => id !== copy)
+    state().reorderDays([...ids, copy])
+    expect(state().program.days.at(-1)!.id).toBe(copy)
+    expect(state().program.days).toHaveLength(5)
+  })
+
+  it('ignores an order that would lose or invent days', () => {
+    const before = state().program.days.map((d) => d.id)
+    state().reorderDays(['day-2', 'day-1'])
+    state().reorderDays(['day-1', 'day-2', 'day-3', 'nope'])
+    expect(state().program.days.map((d) => d.id)).toEqual(before)
+  })
+})
+
 describe('backup', () => {
   it('round-trips through export and import', () => {
     state().loadDemo()
