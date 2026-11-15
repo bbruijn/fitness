@@ -78,6 +78,12 @@ export const IconTrash = (p: P) => (
     <path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12" />
   </svg>
 )
+export const IconCopy = (p: P) => (
+  <svg {...base(p)}>
+    <rect x="8" y="8" width="12" height="12" rx="3" />
+    <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
+  </svg>
+)
 export const IconNote = (p: P) => (
   <svg {...base(p)}>
     <path d="M5 5h14v10l-4 4H5z" />
