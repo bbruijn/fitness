@@ -1,9 +1,9 @@
 import { AnimatePresence, motion, Reorder, useDragControls } from 'motion/react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { num } from '../lib/format'
 import { nextDayId, useStore } from '../lib/store'
 import { MUSCLE_LABEL, MUSCLES, type Day, type Muscle, type PlanItem } from '../lib/types'
-import { IconChevronDown, IconChevronRight, IconGrip, IconPlay, IconPlus, IconSearch, IconTrash } from '../ui/icons'
+import { IconChevronDown, IconChevronRight, IconCopy, IconGrip, IconPlay, IconPlus, IconSearch, IconTrash } from '../ui/icons'
 import { rise, snappy, spring, stagger } from '../ui/motion'
 import { Press } from '../ui/Press'
 import { Sheet } from '../ui/Sheet'
@@ -22,6 +22,16 @@ export function Schema({ onStart }: { onStart: (dayId: string) => void }) {
   const [editing, setEditing] = useState<Editing>(null)
   const [picking, setPicking] = useState<string | null>(null)
   const [dayEdit, setDayEdit] = useState<string | null>(null)
+  /** A just-created copy: slides in and gets scrolled into view. */
+  const [fresh, setFresh] = useState<string | null>(null)
+  useEffect(() => {
+    if (!fresh) return
+    const t = window.setTimeout(
+      () => document.querySelector('.day[data-fresh]')?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+      350,
+    )
+    return () => clearTimeout(t)
+  }, [fresh])
 
   return (
     <motion.div variants={stagger} initial="hidden" animate="show">
@@ -41,7 +51,16 @@ export function Schema({ onStart }: { onStart: (dayId: string) => void }) {
       </motion.header>
 
       {program.days.map((day, i) => (
-        <motion.section key={day.id} className="glass day" variants={rise} layout="position" transition={spring}>
+        <motion.section
+          key={day.id}
+          className="glass day"
+          data-fresh={day.id === fresh || undefined}
+          variants={rise}
+          initial={day.id === fresh ? { opacity: 0, y: -16, scale: 0.97 } : undefined}
+          animate={day.id === fresh ? { opacity: 1, y: 0, scale: 1 } : undefined}
+          layout="position"
+          transition={spring}
+        >
           <button type="button" className="day__head" aria-expanded={open === day.id} onClick={() => setOpen(open === day.id ? null : day.id)}>
             <span className="day__badge">{i + 1}</span>
             <div className="list__main">
@@ -94,7 +113,15 @@ export function Schema({ onStart }: { onStart: (dayId: string) => void }) {
 
       <ItemSheet editing={editing} onClose={() => setEditing(null)} />
       <PickerSheet dayId={picking} onClose={() => setPicking(null)} />
-      <DaySheet dayId={dayEdit} onClose={() => setDayEdit(null)} />
+      <DaySheet
+        dayId={dayEdit}
+        onClose={() => setDayEdit(null)}
+        onCopied={(id) => {
+          setDayEdit(null)
+          setOpen(id)
+          setFresh(id)
+        }}
+      />
     </motion.div>
   )
 }
@@ -258,10 +285,10 @@ function PickerSheet({ dayId, onClose }: { dayId: string | null; onClose: () => 
   )
 }
 
-function DaySheet({ dayId, onClose }: { dayId: string | null; onClose: () => void }) {
+function DaySheet({ dayId, onClose, onCopied }: { dayId: string | null; onClose: () => void; onCopied: (newDayId: string) => void }) {
   const day = useStore((s) => s.program.days.find((d) => d.id === dayId))
   const count = useStore((s) => s.program.days.length)
-  const { updateDay, removeDay } = useStore.getState()
+  const { updateDay, removeDay, duplicateDay } = useStore.getState()
   const [confirm, setConfirm] = useState(false)
   const close = () => {
     setConfirm(false)
@@ -285,6 +312,17 @@ function DaySheet({ dayId, onClose }: { dayId: string | null; onClose: () => voi
           </div>
           <Press className="btn btn--hot btn--block" onClick={close}>
             Klaar
+          </Press>
+          <Press
+            className="btn btn--block"
+            style={{ marginTop: 10 }}
+            onClick={() => {
+              const id = duplicateDay(day.id)
+              setConfirm(false)
+              if (id) onCopied(id)
+            }}
+          >
+            <IconCopy size={18} /> Dag kopiëren
           </Press>
           {count > 1 && (
             <Press

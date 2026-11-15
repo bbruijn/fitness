@@ -44,6 +44,8 @@ interface Actions {
   addDay: () => void
   updateDay: (dayId: string, patch: Partial<Pick<Day, 'name' | 'focus'>>) => void
   removeDay: (dayId: string) => void
+  /** Copies a day with all its exercises right after the original; returns the new day's id. */
+  duplicateDay: (dayId: string) => string | null
   addItem: (dayId: string, exerciseId: string) => void
   updateItem: (dayId: string, itemId: string, patch: Partial<Omit<PlanItem, 'id'>>) => void
   removeItem: (dayId: string, itemId: string) => void
@@ -234,6 +236,22 @@ export const useStore = create<Store>()(
           }),
 
         removeDay: (dayId) => program((p) => void (p.days = p.days.filter((d) => d.id !== dayId))),
+
+        duplicateDay: (dayId) => {
+          const i = get().program.days.findIndex((d) => d.id === dayId)
+          if (i === -1) return null
+          const id = uid()
+          program((p) => {
+            const source = p.days[i]
+            p.days.splice(i + 1, 0, {
+              id,
+              name: `${source.name} (kopie)`,
+              focus: source.focus,
+              items: source.items.map((it) => ({ ...it, id: uid() })),
+            })
+          })
+          return id
+        },
 
         addItem: (dayId, exerciseId) =>
           program((p) => {

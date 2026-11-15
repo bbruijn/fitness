@@ -65,6 +65,49 @@ describe('workout flow', () => {
   })
 })
 
+describe('duplicating a day', () => {
+  it('copies name, focus and exercises right after the original', () => {
+    const before = state().program.days.map((d) => d.id)
+    const id = state().duplicateDay('day-2')!
+    const days = state().program.days
+    expect(days.map((d) => d.id)).toEqual([before[0], before[1], id, before[2], before[3]])
+
+    const [source, copy] = [days[1], days[2]]
+    expect(copy.name).toBe('Dag 2 (kopie)')
+    expect(copy.focus).toBe(source.focus)
+    expect(copy.items.map((it) => [it.exerciseId, it.sets, it.reps, it.weight, it.rest])).toEqual(
+      source.items.map((it) => [it.exerciseId, it.sets, it.reps, it.weight, it.rest]),
+    )
+  })
+
+  it('gives the copy its own ids, so editing it leaves the original alone', () => {
+    const id = state().duplicateDay('day-1')!
+    const copy = state().program.days.find((d) => d.id === id)!
+    const original = state().program.days.find((d) => d.id === 'day-1')!
+    const ids = new Set(state().program.days.flatMap((d) => d.items.map((it) => it.id)))
+    expect(ids.size).toBe(state().program.days.reduce((n, d) => n + d.items.length, 0))
+
+    state().updateItem(id, copy.items[0].id, { sets: 5 })
+    state().removeItem(id, copy.items[1].id)
+    state().updateDay(id, { name: 'Dag 5' })
+    const after = state().program.days.find((d) => d.id === 'day-1')!
+    expect(after).toEqual(original)
+    expect(state().program.days.find((d) => d.id === id)!.items).toHaveLength(original.items.length - 1)
+  })
+
+  it('can start a workout from the copy', () => {
+    const id = state().duplicateDay('day-3')!
+    state().startWorkout(id)
+    expect(state().active!.dayId).toBe(id)
+    expect(state().active!.dayName).toBe('Dag 3 (kopie)')
+  })
+
+  it('ignores an unknown day', () => {
+    expect(state().duplicateDay('nope')).toBeNull()
+    expect(state().program.days).toHaveLength(4)
+  })
+})
+
 describe('backup', () => {
   it('round-trips through export and import', () => {
     state().loadDemo()
